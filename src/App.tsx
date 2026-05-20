@@ -2,10 +2,6 @@ import { useState, useCallback, useRef } from 'react';
 import type { FilterStatus, Task } from './types';
 import { useTasks } from './hooks/useTasks';
 
-/* ─────────────────────────────────────────────
-   TOAST NOTIFICATION SYSTEM
-───────────────────────────────────────────── */
-
 interface ToastItem {
   id: number;
   message: string;
@@ -27,9 +23,6 @@ function useToast() {
   return { toasts, show };
 }
 
-/* ─────────────────────────────────────────────
-   KOMPONEN: TOAST CONTAINER
-───────────────────────────────────────────── */
 
 function ToastContainer({ toasts }: { toasts: ToastItem[] }) {
   return (
@@ -62,9 +55,6 @@ function ToastContainer({ toasts }: { toasts: ToastItem[] }) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   KOMPONEN: FORM TAMBAH TUGAS
-───────────────────────────────────────────── */
 
 interface AddTaskFormProps {
   onAdd: (title: string, description: string) => Promise<boolean>;
@@ -132,9 +122,6 @@ function AddTaskForm({ onAdd }: AddTaskFormProps) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   KOMPONEN: MODAL EDIT TUGAS
-───────────────────────────────────────────── */
 
 interface EditModalProps {
   task: Task;
@@ -200,9 +187,6 @@ function EditModal({ task, onSave, onClose }: EditModalProps) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   KOMPONEN: ITEM TUGAS
-───────────────────────────────────────────── */
 
 interface TaskItemProps {
   task: Task;
@@ -304,9 +288,6 @@ function TaskItem({ task, onToggle, onEdit, onDelete }: TaskItemProps) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   KOMPONEN UTAMA: APP
-───────────────────────────────────────────── */
 
 export default function App() {
   const { toasts, show: showToast } = useToast();
@@ -330,12 +311,9 @@ export default function App() {
     return result.success;
   };
 
-  // Handle toggle
-  // Ganti return type toggleTask di useTasks menjadi object, bukan boolean
   const handleToggle = async (id: number) => {
     const result = await toggleTask(id);
     if (result.success) {
-      // ← fix: pakai status dari respons API, bukan dari state lama
       const msg = result.is_completed
         ? 'Tugas ditandai selesai! ✓'
         : 'Tugas ditandai belum selesai.';
@@ -345,7 +323,6 @@ export default function App() {
     }
   };
 
-  // Handle edit
   const handleSaveEdit = async (id: number, title: string, description: string): Promise<boolean> => {
     const result = await editTask(id, { title, description: description || null });
     if (result.success) {
@@ -356,7 +333,6 @@ export default function App() {
     return result.success;
   };
 
-  // Handle hapus
   const handleDelete = async (id: number) => {
     const success = await removeTask(id);
     if (success) {
@@ -493,9 +469,6 @@ export default function App() {
   );
 }
 
-/* ─────────────────────────────────────────────
-   STYLES
-───────────────────────────────────────────── */
 
 const styles: Record<string, React.CSSProperties> = {
   root: {

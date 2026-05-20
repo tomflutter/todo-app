@@ -6,7 +6,7 @@ const API_URL = `${import.meta.env.VITE_API_URL}/tasks`;
 
 const BASE_HEADERS = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',   // ← fix: Laravel return JSON, bukan HTML
+  'Accept': 'application/json',
 };
 
 export function useTasks() {
@@ -17,7 +17,6 @@ export function useTasks() {
   const [searchQuery, setSearchQuery] = useState('');
   const [meta, setMeta] = useState({ total: 0, completed: 0, active: 0 });
 
-  // fix: debounce search dengan useRef
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
@@ -30,7 +29,7 @@ export function useTasks() {
   const fetchTasks = useCallback(async () => {
     try {
       setIsLoading(true);
-      setError(null); // ← fix: reset error sebelum fetch baru
+      setError(null);
 
       const params = new URLSearchParams();
       if (filterStatus !== 'all') params.append('status', filterStatus);
@@ -66,7 +65,6 @@ export function useTasks() {
     }
   };
 
-  // fix: return status baru dari API supaya toast benar
   const toggleTask = async (id: number) => {
     try {
       const res = await fetch(`${API_URL}/${id}/toggle`, {
@@ -89,14 +87,13 @@ export function useTasks() {
         body: JSON.stringify(data),
       });
       const json = await res.json();
-      if (json.success) fetchTasks(); // ← fix: hanya fetch jika berhasil
+      if (json.success) fetchTasks();
       return json;
     } catch {
       return { success: false };
     }
   };
 
-  // fix: optimistic delete — hapus dari state dulu, rollback jika gagal
   const removeTask = async (id: number) => {
     const prev = tasks;
     setTasks(t => t.filter(task => task.id !== id));
@@ -108,7 +105,7 @@ export function useTasks() {
       fetchTasks();
       return true;
     } catch {
-      setTasks(prev); // rollback
+      setTasks(prev); 
       return false;
     }
   };
