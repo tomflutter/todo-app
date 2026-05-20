@@ -1,6 +1,6 @@
 # TodoMaster
 
-Aplikasi manajemen tugas fullstack — React.js (frontend) + Laravel (backend).
+Aplikasi manajemen tugas — React.js (frontend) + Laravel (backend).
 
 ```
 /
@@ -46,7 +46,7 @@ Buka file `tomtech/.env` dan sesuaikan konfigurasi database:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=todomaster
+DB_DATABASE=todo_app
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -156,25 +156,6 @@ curl -X POST http://127.0.0.1:8000/api/tasks \
 
 ---
 
-## File yang Tidak Boleh Di-commit
-
-Pastikan baris berikut ada di `.gitignore` masing-masing folder:
-
-**`todo-app/.gitignore`**
-```
-*.local
-node_modules/
-dist/
-```
-
-**`tomtech/.gitignore`**
-```
-.env
-vendor/
-```
-
----
-
 ## Struktur Folder
 
 ```
@@ -185,7 +166,7 @@ todo-app/
 │   ├── types.ts               # TypeScript interfaces
 │   └── App.tsx                # Komponen utama
 ├── .env.example
-└── .env.local                 # ← buat manual, jangan di-commit
+└── .env.local                 
 
 tomtech/
 ├── app/
@@ -200,7 +181,7 @@ tomtech/
 ├── database/migrations/
 ├── routes/api.php
 ├── .env.example
-└── .env                       # ← buat manual, jangan di-commit
+└── .env                      
 ```
 
 ---
@@ -214,11 +195,3 @@ Buka `tomtech/config/cors.php` dan pastikan `allowed_origins` mencakup URL front
 ```php
 'allowed_origins' => ['http://localhost:5173'],
 ```
-
-**Laravel return HTML saat error (bukan JSON)**
-
-Pastikan setiap request dari frontend menyertakan header `Accept: application/json`. Hook `useTasks.ts` sudah menangani ini secara otomatis.
-
-**`VITE_API_URL` tidak terbaca**
-
-Variabel Vite harus diawali `VITE_` agar bisa diakses di kode. Setelah mengubah `.env.local`, restart dev server dengan `npm run dev`.
